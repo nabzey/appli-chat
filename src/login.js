@@ -1859,18 +1859,20 @@ function addContactForm() {
       
       function generateUniquePrenom(prenom, nom) {
         let suffix = 1;
-        let uniquePrenom = prenom;
-        while (Liste.some(c => c.prenom === uniquePrenom && c.name === nom)) {
-          uniquePrenom = prenom + suffix;
+        let uniqueFullName = `${prenom} ${nom}`;
+        while (Liste.some(c => `${c.prenom} ${c.name}` === uniqueFullName)) {
+          uniqueFullName = `${prenom} ${nom}${suffix}`;
           suffix++;
         }
-        return uniquePrenom;
+        const [uniquePrenom, ...uniqueNomParts] = uniqueFullName.split(" ");
+        const uniqueNom = uniqueNomParts.join(" ");
+        return { uniquePrenom, uniqueNom };
       }
       
-      const uniquePrenom = generateUniquePrenom(prenom, nom);
+      const { uniquePrenom, uniqueNom } = generateUniquePrenom(prenom, nom);
       const newContact = {
         prenom: uniquePrenom,
-        name: nom,
+        name: uniqueNom,
         contact
       };
       
