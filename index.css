@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.group-content {
+    transition: transform 0.3s ease;
+  }
+  .group-actions {
+    min-width: 110px;
+  }
