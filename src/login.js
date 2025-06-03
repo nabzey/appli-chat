@@ -1,7 +1,5 @@
-
 import '/index.css';
 import { createElement } from "./component.js";
-
 const data = [ { tite: "message", icon: "fa-solid fa-envelope" },{ tite: "groupe", icon: "fa-solid fa-user-group" },{ tite: "diffusions", icon: "fa-solid fa-arrows-turn-to-dots" },{ tite: "archive", icon: "fa-solid fa-box-archive" },{ tite: "ajouter", icon: "fa-solid fa-plus" }, ];
 const haut = [{ icon: "fa-solid fa-delete-left", title: "Fermer", color: "orange" },{ icon: "fa fa-archive", title: "Archiver", color: "gray" },{icon: "fa fa-square", title: "Noir", color: "black" },{ icon: "fa fa-trash", title: "Supprimer", color: "red" }    ];
 const Liste = [{ prenom: "John", name: "Doe", contact: "+221771234567", photo: null },{ prenom: "Jane", name: "Smith", contact: "+221771234568", photo: null },{ prenom: "Bob", name: "Johnson", contact: "+221771234569", photo: null }];
@@ -9,7 +7,6 @@ const groupes = [ {   id: 1,   nom: "Famille", description: "Groupe familial",  
   { id: 2, nom: "Travail",  description: "Équipe de travail",  adminTel: "+221771234569",  membres: ["+221771234567", "+221771234568", "+221771234569"],  admins: ["+221771234569"]  }];
 const isAdmin = true;let groupesArchives = [];let showingArchives = false;let currentView = 'discussions';
 let selectedContact = null;let selectedGroupe = null;let currentUser = null;let users = [];let messages = [];let currentRoom = 'general';
-let centerColumn = null;let navBar = null;let defaultMessagesArea = null;let sms = null;
 
 function showAuthForm() {
   // Vider complètement le body
@@ -87,8 +84,6 @@ function showAuthForm() {
   // Ajouter le formulaire au conteneur principal
   root.appendChild(formContainer);
 }
-
-// Fonction pour gérer la connexion
 function handleLogin(contactInput) {
   const contact = contactInput.value.trim();
   const errorBox = document.getElementById("error-box");
@@ -105,8 +100,6 @@ function handleLogin(contactInput) {
   }
   showApp();
 }
-
-// Fonction pour afficher une erreur
 function showError(message, errorBox) {
   if (errorBox) {
     errorBox.textContent = message;
@@ -125,7 +118,6 @@ function addMessage(text, user = currentUser) {
     room: currentRoom
   });
 }
-
 function createMessage(message) {
   if (message.type === 'system') {
     return createElement("div", {
@@ -164,53 +156,15 @@ function createMessage(message) {
     ].filter(Boolean))
   ]);
 }
-
-// function createChatArea() {
-//   const chatMessages = createElement("div", {
-//     class: ["flex-1", "overflow-y-auto", "p-4", "space-y-2"],
-//     id: "chat-messages"
-//   });
-
-//   const messageInput = createElement("input", {
-//     class: ["flex-1", "border", "border-gray-300", "rounded-lg", "px-4", "py-2", "focus:ring-2", "focus:ring-orange-500", "focus:border-transparent"],
-//     placeholder: "Tapez votre message...",
-//     type: "text"
-//   });
-
-//   const sendButton = createElement("button", {
-//     class: ["bg-orange-500", "text-white", "px-6", "py-2", "rounded-lg", "hover:bg-orange-600", "transition", "ml-2", "font-medium"],
-//     text: "Envoyer",
-//     onclick: () => sendMessage(messageInput, chatMessages)
-//   });
-
-//   // Envoyer avec Entrée
-//   messageInput.addEventListener("keypress", (e) => {
-//     if (e.key === "Enter") {
-//       sendMessage(messageInput, chatMessages);
-//     }
-//   });
-
-//   const inputArea = createElement("div", {
-//     class: ["p-4", "border-t", "border-gray-200", "flex", "items-center"]
-//   }, [messageInput, sendButton]);
-
-//   return createElement("div", {
-//     class: ["flex", "flex-col", "h-full"]
-//   }, [chatMessages, inputArea]);
-// }
-
 function sendMessage(input, chatContainer) {
   const text = input.value;
   if (!text.trim()) return;
-
   addMessage(text);
   input.value = "";
   updateChatDisplay(chatContainer);
     setTimeout(() => {
     chatContainer.scrollTop = chatContainer.scrollHeight;
-  }, 100);
-}
-
+  }, 100);}
 function updateChatDisplay(chatContainer) {
   const currentRoomMessages = messages.filter(m => m.room === currentRoom);
   chatContainer.innerHTML = "";
@@ -244,7 +198,6 @@ function updateUsersList() {
     usersList.appendChild(userItem);
   });
 }
-
 function showApp() {
   document.body.innerHTML = "";
   
@@ -253,9 +206,6 @@ function showApp() {
   });
   root.id = "root";
   document.body.appendChild(root);
-
-// *********************************************************************
-
 function showGroupes() {
   currentView = 'groupes';
   selectedGroupe = null;
@@ -275,11 +225,9 @@ function showGroupes() {
       updateGroupList();
     }
   });
-
   const groupContainer = createElement("div", {
     class: ["space-y-4", "overflow-y-auto", "h-[400px]", "pr-2"]
   });
-
   function updateGroupList() {
     groupContainer.replaceChildren(
       ...groupes
@@ -294,7 +242,6 @@ function showGroupes() {
               isActif ? "bg-gray-100 shadow-md scale-[1.01]" : "hover:bg-gray-50"
             ]
           });
-
           const content = createElement("div", {
             class: ["p-3", "transition-transform", "duration-300", "group-content"]
           }, [
@@ -305,7 +252,6 @@ function showGroupes() {
               `${groupe.membres ? groupe.membres.length : 0}`
             ])
           ]);
-
           const actionBtns = isAdmin ? createElement("div", {
             class: ["absolute", "top-0", "right-0", "h-full", "flex", "items-center", "gap-2", "bg-gray-100", "px-3", "text-sm", "group-actions", "hidden"]
           }, [
@@ -320,9 +266,7 @@ function showGroupes() {
               "Archiver"
             ])
           ]) : null;
-
           let startX = 0, currentX = 0, moved = false;
-
           function onPointerDown(e) {
             startX = e.clientX;
             moved = false;
@@ -331,7 +275,6 @@ function showGroupes() {
             window.addEventListener("pointerup", onPointerUp);
             window.addEventListener("pointercancel", onPointerUp);
           }
-
           function onPointerMove(e) {
             currentX = e.clientX;
             const deltaX = currentX - startX;
@@ -343,7 +286,6 @@ function showGroupes() {
               if (actionBtns) actionBtns.classList.remove("hidden");
             }
           }
-
           function onPointerUp() {
             window.removeEventListener("pointermove", onPointerMove);
             window.removeEventListener("pointerup", onPointerUp);
@@ -360,11 +302,7 @@ function showGroupes() {
                 if (actionBtns) actionBtns.classList.remove("hidden");
               } else {
                 content.style.transform = "translateX(0)";
-                if (actionBtns) actionBtns.classList.add("hidden");
-              }
-            }
-          }
-
+                if (actionBtns) actionBtns.classList.add("hidden");  } } }
           content.addEventListener("pointerdown", onPointerDown);
 
           container.addEventListener("click", (e) => {
@@ -375,14 +313,12 @@ function showGroupes() {
               showGroupeDetails(groupe);
             }
           });
-
           container.append(content);
           if (actionBtns) container.append(actionBtns);
           return container;
         })
     );
   }
-
   function creerGroupeForm() {
     const form = createElement("form", {
       class: ["space-y-4", "bg-white", "p-4", "rounded", "shadow", "max-w-md", "mx-auto"]
@@ -494,24 +430,21 @@ function showGroupes() {
       groupContainer
     ])
   );
-
   updateGroupList();
-
   function truncate(text) {
     return text.length > 10 ? text.substring(0, 10) + "..." : text;
   }
 }
-
 let conversationsGroupes = {}; // Stocker les conversations par groupe
 let currentNavGroupe = null; // Variable pour stocker le groupe actuellement sélectionné pour la navbar
 function createNavBarGroupe(groupe = null) {
   let profileContent, groupeInfo;
-  
+
   if (groupe) {
     const firstLetter = (groupe.nom?.charAt(0) || '').toUpperCase();
     const secondLetter = (groupe.nom?.charAt(1) || '').toUpperCase();
     profileContent = firstLetter + secondLetter;
-    
+
     // Informations du groupe
     groupeInfo = createElement("div", {
       class: ["flex", "flex-col", "items-center", "text-center"]
@@ -547,7 +480,7 @@ function createNavBarGroupe(groupe = null) {
       }, profileContent),
       groupeInfo
     ].filter(Boolean)),
-    
+
     // Boutons de navigation à droite
     createElement("div", {
       class: ["flex", "flex-row", "gap-3", "items-center"]
@@ -563,14 +496,19 @@ function createNavBarGroupe(groupe = null) {
             item.color === "red" ? "border-red-500 bg-red-100 text-red-600" : ""
           ],
           title: item.title,
+          onclick: () => {
+            // Fonctionnalité d'archivage du groupe
+            if (item.title === "Archiver" && groupe) {
+              archiverGroupe(groupe.id);
+            }
+            // Tu peux ajouter ici d'autres actions pour les autres boutons si besoin
+          }
         },
           createElement("i", { class: [item.icon, "text-md"] }))
       )
     )
   ]);
 }
-
-// Fonction pour mettre à jour la navbar avec les infos du groupe
 function updateNavBarGroupe(groupe) {
   currentNavGroupe = groupe;
   const messagesArea = document.getElementById("messages-area");
@@ -585,8 +523,6 @@ function updateNavBarGroupe(groupe) {
     }
   }
 }
-
-// Fonction pour afficher la zone de conversation du groupe dans la colonne de droite
 function showGroupeConversationArea(groupe) {
   selectedGroupe = groupe;
   const groupeKey = `groupe_${groupe.id}`;
@@ -636,8 +572,6 @@ function showGroupeConversationArea(groupe) {
     };
   }
 }
-
-// Fonction pour envoyer un message au groupe
 function sendGroupeMessage(groupe, message) {
   const groupeKey = `groupe_${groupe.id}`;
   const timestamp = new Date().toLocaleTimeString('fr-FR', { 
@@ -662,8 +596,6 @@ function sendGroupeMessage(groupe, message) {
   // Re-rendre les messages
   renderGroupeMessages(groupe);
 }
-
-// Fonction pour afficher les messages du groupe
 function renderGroupeMessages(groupe) {
   const groupeKey = `groupe_${groupe.id}`;
   const messages = conversationsGroupes[groupeKey] || [];
@@ -689,11 +621,8 @@ function renderGroupeMessages(groupe) {
   // Scroll vers le bas
   container.scrollTop = container.scrollHeight;
 }
-
-// Fonction pour créer un élément de message pour le groupe
 function createGroupeMessageElement(message) {
-  const isMe = message.sender === 'me';
-  
+  const isMe = message.sender === 'me'; 
   return createElement("div", {
     class: [
       "flex", 
@@ -714,8 +643,6 @@ function createGroupeMessageElement(message) {
     ])
   ]);
 }
-
-// Modification à apporter dans showGroupeDetails (remplacer la fonction existante)
 function showGroupeDetails(groupe) {
     selectedGroupe = groupe;
     showGroupeConversationArea(groupe);
@@ -878,8 +805,6 @@ function showGroupeDetails(groupe) {
   
     centerColumn.replaceChildren(container);
   }
-  
-//////////////////********************* */
 function archiverGroupe(id) {
   const index = groupes.findIndex(g => g.id === id);
   if (index !== -1) {
@@ -892,7 +817,6 @@ function archiverGroupe(id) {
     }
   }
 }
-
 function showArchives() {
   currentView = 'archives';
   let filtre = "";
@@ -1000,9 +924,6 @@ function showArchives() {
 
   updateArchiveList();
 }
-
-///**** dif*******************************/
-
 function showDiffusion() {
   currentView = 'diffusion';
   let filtre = "";
@@ -1124,21 +1045,12 @@ function showDiffusion() {
   centerColumn.replaceChildren(wrapper);
   updateContactList();
 }
-
-/////**************************** */
 const centerColumn = createElement("div", { class: ["bg-[#f9f7f5]", "w-[400px]"], });
 let filtre = "";
-
 let conversations = {}; // Stocker les conversations par contact
-// Variables pour les éléments de l'interface principale
 let rightColumn = null;
 let currentSmsInput = null;
-
-// Variable pour stocker le contact actuellement sélectionné pour la navbar
 let currentNavContact = null;
-
-// Données pour la barre de navigation (vous devez définir cette variable)
-
 const recherche = createElement("input", {
     type: "text",
     placeholder: "Rechercher...",
@@ -1156,9 +1068,6 @@ const recherche = createElement("input", {
       showDiscussion();
     }
   });
-  
-
-// Fonction pour créer la barre de navigation avec profil
 function createNavBar(contact = null) {
   // Déterminer les informations à afficher
   let profileContent, contactInfo;
@@ -1228,8 +1137,6 @@ function createNavBar(contact = null) {
     )
   ]);
 }
-
-// Fonction pour mettre à jour la navbar avec les infos du contact
 function updateNavBar(contact) {
   currentNavContact = contact;
   const messagesArea = document.getElementById("messages-area");
@@ -1244,8 +1151,6 @@ function updateNavBar(contact) {
     }
   }
 }
-
-// Fonction pour créer la colonne de droite avec NavBar et SMS
 function createRightColumn() {
   const navBar = createNavBar();
   
@@ -1357,8 +1262,6 @@ function createRightColumn() {
     sms
   ]);
 }
-
-// Fonction pour afficher la zone de conversation dans la colonne de droite
 function showConversationArea(contact) {
   selectedContact = contact;
   const contactKey = `${contact.prenom}_${contact.name}_${contact.contact}`;
@@ -1389,16 +1292,12 @@ function showConversationArea(contact) {
     currentSmsInput.placeholder = `Envoyer un message à ${contact.prenom}...`;
   }
 }
-
-// Fonction pour basculer l'affichage du menu des pièces jointes
 function toggleAttachmentMenu() {
   const menu = document.getElementById("attachment-menu");
   if (menu) {
     menu.classList.toggle("hidden");
   }
 }
-
-// Fonction pour gérer la sélection de photos
 function handlePhotoSelection() {
   if (!selectedContact) {
     alert("Veuillez sélectionner un contact d'abord");
@@ -1425,8 +1324,6 @@ function handlePhotoSelection() {
   // Fermer le menu
   toggleAttachmentMenu();
 }
-
-// Fonction pour gérer la sélection de documents
 function handleDocumentSelection() {
   if (!selectedContact) {
     alert("Veuillez sélectionner un contact d'abord");
@@ -1453,8 +1350,6 @@ function handleDocumentSelection() {
   // Fermer le menu
   toggleAttachmentMenu();
 }
-
-// Fonction pour créer et afficher la liste de contacts
 function showContactSelectionModal() {
   // Supprimer le modal existant s'il y en a un
   const existingModal = document.getElementById('contact-selection-modal');
@@ -1817,27 +1712,23 @@ function addContactForm() {
       const prenom = inputPrenom.value.trim();
       const nom = inputNom.value.trim();
       const contact = inputContact.value.trim();
-      
       [inputPrenom, inputNom, inputContact].forEach(input => input.classList.remove("border-red-500"));
       [errorPrenom, errorNom, errorContact].forEach(err => {
         err.textContent = "";
         err.classList.add("hidden");
       });
-      
       if (!prenom) {
         inputPrenom.classList.add("border-red-500");
         errorPrenom.textContent = "Le prénom est requis.";
         errorPrenom.classList.remove("hidden");
         valid = false;
       }
-      
       if (!nom) {
         inputNom.classList.add("border-red-500");
         errorNom.textContent = "Le nom est requis.";
         errorNom.classList.remove("hidden");
         valid = false;
       }
-      
       if (!contact) {
         inputContact.classList.add("border-red-500");
         errorContact.textContent = "Le contact est requis.";
@@ -1854,9 +1745,7 @@ function addContactForm() {
         errorContact.classList.remove("hidden");
         valid = false;
       }
-      
       if (!valid) return;
-      
       function generateUniquePrenom(prenom, nom) {
         let suffix = 1;
         let uniqueFullName = `${prenom} ${nom}`;
@@ -1868,19 +1757,16 @@ function addContactForm() {
         const uniqueNom = uniqueNomParts.join(" ");
         return { uniquePrenom, uniqueNom };
       }
-      
       const { uniquePrenom, uniqueNom } = generateUniquePrenom(prenom, nom);
       const newContact = {
         prenom: uniquePrenom,
         name: uniqueNom,
         contact
       };
-      
       Liste.push(newContact);
       showDiscussion();
     }
   }, "Ajouter");
-  
   const cancelBtn = createElement("button", {
     class: ["bg-gray-500", "text-white", "px-4", "py-2", "rounded"],
     onclick: () => {
@@ -1888,7 +1774,6 @@ function addContactForm() {
       if (wrapper) wrapper.innerHTML = "";
     }
   }, "Annuler");
-  
   const formContainer = createElement("div", {
     class: ["p-4", "space-y-3", "flex", "flex-col", "bg-white", "rounded-lg", "shadow-md", "mb-4"]
   }, [
@@ -1898,7 +1783,6 @@ function addContactForm() {
     contactField,
     createElement("div", { class: ["flex", "gap-2"] }, [addBtn, cancelBtn])
   ]);
-  
   const wrapper = document.getElementById("form-add-contact");
   if (wrapper) wrapper.replaceChildren(formContainer);
 }
@@ -1955,7 +1839,6 @@ const attachmentMenu = createElement("div", {
     createElement("span", { class: ["text-sm", "text-gray-700"] }, "Contact")
   ])
 ]);
-
 const sms = createElement("div", {
   class: [
     "bg-white", "text-black", "border-t", "p-3", "flex", "relative",
@@ -2116,9 +1999,7 @@ const app = createElement("div", {
   showDiscussion();
     const chatContainer = document.getElementById("chat-messages");
   if (chatContainer) {
-    updateChatDisplay(chatContainer);
-  }
-}
+    updateChatDisplay(chatContainer); }}
 document.addEventListener("DOMContentLoaded", () => {
   showAuthForm();
 });
